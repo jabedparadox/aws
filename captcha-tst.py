@@ -15,11 +15,20 @@ import argparse
 import requests
 from time import gmtime, strftime
 import time
+import base64
 from subprocess import check_output
 try:
     import Image
 except ImportError:
     from PIL import Image
+
+#Read captcha image.
+with open("test.jpg", "rb") as img:
+    incd = base64.b64encode(img.read())
+
+#Rewrite to image.
+#with open('test1.jpg','wb') as returnimg:
+    #returnimg.write(base64.decodebytes(incd))
 
 apikey = " "
 proxy = "127.0.0.1:0000"
@@ -29,7 +38,7 @@ payload = {
 	'key' : apikey,
 	#'proxy':'127.0.0.1:0000',
    	#'proxytype':"http/https",
-	'body' : '',
+	'body' : incd,
 	#'action': 'getbalance'
 }
 
