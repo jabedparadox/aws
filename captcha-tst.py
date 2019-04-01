@@ -13,6 +13,7 @@ import sys
 import os
 import argparse
 import requests
+from time import gmtime, strftime
 import time
 from subprocess import check_output
 try:
@@ -27,14 +28,14 @@ payload = {
 	'method' : '',
 	'key' : apikey,
 	#'proxy':'127.0.0.1:0000',
-    #'proxytype':"http/https",
+   	#'proxytype':"http/https",
 	'body' : '',
 	#'action': 'getbalance'
 }
 
 request = requests.Session()
-pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_tesseract_executable>'
 
+pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_tesseract_executable>'
 value=Image.open("captcha.jpg")
 text = pytesseract.image_to_string(value, config='')    
 print("Captcha text:",text)
@@ -44,15 +45,19 @@ print("Captcha text:",text)
 
 #Online captcha solving "https://2captcha.com/" "http://www.imagetyperz.com/"
 #def 2captcha():
+	starttime = time()
+	#start = time.time()
 	resp = requests.get("http://2captcha.com/in.php", params=payload)
-	captchaid = (captchaid.text).split("|")[1]
-	captans = requests.get("http://2captcha.com/res.php?key=" + apikey + "&action=get&id=" + captchaid).text
-	while "CAPCHA_NOT_READY" in captans:
-		captans = requests.get("http://2captcha.com/res.php?key=" + apikey + "&action=get&id=" + captchaid).text
+	captchaid = (resp.text).split("|")[1]
+	capt_answer = requests.get("http://2captcha.com/res.php?key=" + apikey + "&action=get&id=" + captchaid).text
+	while "CAPCHA_NOT_READY" in capt_answer:
+		capt_answer = requests.get("http://2captcha.com/res.php?key=" + apikey + "&action=get&id=" + captchaid).text
 		time.sleep()
-	captans = captans.split("|")[1]
-	#print(captans)
-	return captans
+	capt_answer = capt_answer.split("|")[1]
+	donetime = time.time() - starttime
+	#print('Solving time:' + int(donetime))
+	#print(capt_answer)
+	return capt_answer
 		
 def solvecaptcha(path):
 	print("Resizing Image")
