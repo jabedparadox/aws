@@ -36,7 +36,19 @@ from fake_useragent import UserAgent
 # https://www.amazon.in/gp/search/other/ref=sr_in_1_-2?me=A368CFGDO8H247&rh=i%3Amerchant-items&pickerToList=brandtextbin&indexField=%23&ie=UTF8&qid=1552922225 ----- test url
 
 ua = UserAgent()
+
+def random_useragent():
+    #http://useragentstring.com/pages/useragentstring.php
+    url = "https://fake-useragent.herokuapp.com/browsers/0.1.8"
+    r = requests.get(url)
+    randomuseragent = loads(r.text)['browsers']
+    #print(random.choice(randomuseragent[random.choice(list(randomuseragent))]))
+    return random.choice(randomuseragent[random.choice(list(randomuseragent))])
+
+#u_a = random_useragent()
+
 headers = {'User-Agent': ua.random,
+           #'User-Agent': u_a,
            #'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
            #':authority': 'www.amazon.in',
            #':scheme': 'https',
@@ -57,6 +69,7 @@ headers3 = {'Host': 'www.amazon.in',
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': ua.random,
+            #'User-Agent': u_a,
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             #'Referer': 'https://www.amazon.in/gp/search/other/ref=sr_in_m_L?me=A368CFGDO8H247&rh=i%3Amerchant-items&pickerToList=brandtextbin&indexField=m&ie=UTF8&qid=1552586898',
             'Accept-Encoding': 'gzip, deflate, br',
